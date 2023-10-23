@@ -15,26 +15,34 @@ for i in range(10):
     e_R = 5
     cells.append(Cell(rho_R, 0.1, e_R))
 
+for i, cell in enumerate(cells):
+    if(i < len(cells)-1):
+        cell.F_half = cell.find_F_half(cells[i+1])
+
 times = []
 rho_vs_time = []
 for i in range(len(cells)-2):
     rho_vs_time.append([])
 
-
-for t in range(10):
+    
+for t in range(2):
     times.append(t)
     for i, cell in enumerate(cells):
         if(i > 0 and i < len(cells)-1):
-            left_cell = cells[i-1]
             right_cell = cells[i+1]
+            left_cell = cells[i-1]
 
             print("left cell F_half from main:", left_cell.F_half[0])
             print("cell F_half from main:", cell.F_half[0])
-            cell.find_F_half(left_cell)
+            cell.find_F_half(right_cell)
             cell.evolve(1, 1, left_cell)
             rho_vs_time[i-1].append(cell.U[0])
             # print("alpha plus:", cell.alpha_plus)
             # print("alpha minus:", cell.alpha_minus)
+
+for c in cells:
+    print(c.F_half[0])
+
 
 print(rho_vs_time)
 rho_vs_x = np.transpose(rho_vs_time)
